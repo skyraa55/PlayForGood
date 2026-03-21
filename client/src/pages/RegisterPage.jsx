@@ -4,8 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 import { Trophy, Mail, Lock, User, Eye, EyeOff, Heart, ArrowRight, Star, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../lib/api';
-
-/* ── floating golf ball ── */
 function Ball({ style }) {
   return (
     <div style={{
@@ -18,7 +16,6 @@ function Ball({ style }) {
   );
 }
 
-/* ── left panel step ── */
 function Step({ num, title, desc, delay }) {
   return (
     <div style={{
@@ -39,7 +36,6 @@ function Step({ num, title, desc, delay }) {
     </div>
   );
 }
-
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -49,7 +45,6 @@ export default function RegisterPage() {
   const [charities, setCharities] = useState([]);
   const [focused, setFocused] = useState('');
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     api.get('/charities').then(r => setCharities(r.data)).catch(() => {});
   }, []);
@@ -131,7 +126,7 @@ export default function RegisterPage() {
     try {
       const payload = { ...form, charity_id: form.charity_id || undefined };
       const user = await register(payload);
-      toast.success(`Welcome, ${user.name}! 🎉`);
+      toast.success(`Welcome, ${user.name}!`);
       navigate('/subscribe');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Registration failed');
@@ -139,17 +134,13 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
-
   const pct = form.charity_percentage;
-
   return (
     <div style={{
       height: '100vh', display: 'flex', overflow: 'hidden',
       fontFamily: "'DM Sans', sans-serif",
       background: '#f7faf8',
     }}>
-
-      {/* ── LEFT PANEL ── */}
       <div
         className="reg-left-panel"
         style={{
@@ -161,7 +152,6 @@ export default function RegisterPage() {
           flexShrink: 0,
         }}
       >
-        {/* topo contour lines */}
         <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.07, pointerEvents: 'none' }} preserveAspectRatio="xMidYMid slice">
           <defs>
             <pattern id="rp-topo" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
@@ -172,8 +162,6 @@ export default function RegisterPage() {
           </defs>
           <rect width="100%" height="100%" fill="url(#rp-topo)"/>
         </svg>
-
-        {/* spinning ring */}
         <div style={{
           position: 'absolute', top: -80, right: -80,
           width: 320, height: 320, borderRadius: '50%',
@@ -185,13 +173,9 @@ export default function RegisterPage() {
           width: 260, height: 260, borderRadius: '50%',
           border: '1px solid rgba(255,255,255,0.06)',
         }} />
-
-        {/* floating balls */}
         <Ball style={{ top: '22%', right: '10%', width: 18, height: 18, animation: 'floatBall 6s ease-in-out infinite' }} />
         <Ball style={{ top: '48%', right: '24%', width: 11, height: 11, animation: 'floatBall 9s ease-in-out 1.5s infinite' }} />
         <Ball style={{ top: '70%', right: '7%',  width: 15, height: 15, animation: 'floatBall 7.5s ease-in-out 0.8s infinite' }} />
-
-        {/* grass blades */}
         <svg style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 56, opacity: 0.3, pointerEvents: 'none' }} viewBox="0 0 400 56" preserveAspectRatio="none">
           {Array.from({ length: 28 }, (_, i) => {
             const x = (i / 27) * 390 + 5;
@@ -206,8 +190,6 @@ export default function RegisterPage() {
             );
           })}
         </svg>
-
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, animation: 'fadeUp 0.5s ease both' }}>
           <div style={{
             width: 32, height: 32, borderRadius: 10,
@@ -219,8 +201,6 @@ export default function RegisterPage() {
           </div>
           <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, letterSpacing: -0.3 }}>GolfGives</span>
         </div>
-
-        {/* Main copy */}
         <div style={{ marginBottom: 20, flex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -249,8 +229,6 @@ export default function RegisterPage() {
           }}>
             Create your account in seconds and join thousands of golfers making a real difference.
           </p>
-
-          {/* Steps */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <Step num="1" title="Create your account"   desc="Fill in your details — it only takes a minute."   delay={0.35} />
             <Step num="2" title="Choose a charity"      desc="Pick a cause close to your heart to support."     delay={0.40} />
@@ -258,8 +236,6 @@ export default function RegisterPage() {
             <Step num="4" title="Win & give back"        desc="Match numbers to win prizes while funding good."  delay={0.50} />
           </div>
         </div>
-
-        {/* Bottom trust badge */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 8,
           padding: '10px 14px',
@@ -273,14 +249,11 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
-
-      {/* ── RIGHT PANEL ── */}
       <div style={{
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '20px 24px', position: 'relative', overflow: 'hidden',
         overflowY: 'auto',
       }}>
-        {/* dot grid bg */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
           backgroundImage: 'radial-gradient(circle, rgba(0,107,58,0.10) 1px, transparent 1px)',
@@ -289,15 +262,12 @@ export default function RegisterPage() {
           WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%)',
           pointerEvents: 'none',
         }} />
-
         <div style={{
           width: '100%', maxWidth: 380,
           position: 'relative', zIndex: 1,
           animation: mounted ? 'fadeUp 0.55s ease 0.15s both' : 'none',
           padding: '4px 0',
         }}>
-
-          {/* Mobile logo */}
           <Link to="/" style={{
             display: 'none', alignItems: 'center', gap: 8,
             justifyContent: 'center', marginBottom: 20,
@@ -312,8 +282,6 @@ export default function RegisterPage() {
             </div>
             <span style={{ fontWeight: 700, fontSize: 16, color: '#0d1f14' }}>GolfGives</span>
           </Link>
-
-          {/* Heading */}
           <div style={{ marginBottom: 18 }}>
             <h1 style={{
               fontFamily: "'Playfair Display', serif",
@@ -324,11 +292,7 @@ export default function RegisterPage() {
               Join and start playing with purpose
             </p>
           </div>
-
-          {/* Form */}
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
-            {/* Name */}
             <div>
               <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#2d4a38', marginBottom: 5 }}>
                 Full Name <span style={{ color: '#006B3A' }}>*</span>
@@ -358,8 +322,6 @@ export default function RegisterPage() {
                 />
               </div>
             </div>
-
-            {/* Email */}
             <div>
               <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#2d4a38', marginBottom: 5 }}>
                 Email address <span style={{ color: '#006B3A' }}>*</span>
@@ -389,8 +351,6 @@ export default function RegisterPage() {
                 />
               </div>
             </div>
-
-            {/* Password */}
             <div>
               <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#2d4a38', marginBottom: 5 }}>
                 Password <span style={{ color: '#006B3A' }}>*</span>
@@ -434,7 +394,6 @@ export default function RegisterPage() {
                   {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
-              {/* password strength */}
               {form.password.length > 0 && (
                 <div style={{ display: 'flex', gap: 3, marginTop: 6 }}>
                   {[1,2,3].map(i => (
@@ -456,8 +415,6 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-
-            {/* Charity Select */}
             <div>
               <label style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: '#2d4a38', marginBottom: 5 }}>
                 <Heart size={11} color="#006B3A" fill="rgba(0,107,58,0.2)" />
@@ -491,8 +448,6 @@ export default function RegisterPage() {
                 }} />
               </div>
             </div>
-
-            {/* Charity % slider */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
                 <label style={{ fontSize: 12, fontWeight: 600, color: '#2d4a38' }}>
@@ -503,7 +458,6 @@ export default function RegisterPage() {
                   fontSize: 17, fontWeight: 900, color: '#006B3A', lineHeight: 1,
                 }}>{pct}%</span>
               </div>
-
               <input
                 type="range" min="10" max="100"
                 value={pct}
@@ -511,7 +465,6 @@ export default function RegisterPage() {
                 className="reg-range"
                 style={{ width: '100%', '--pct': `${pct}%` }}
               />
-
               <div style={{
                 marginTop: 7, padding: '7px 12px',
                 background: 'linear-gradient(135deg,#f0f7f3,#e8f5ef)',
@@ -524,8 +477,6 @@ export default function RegisterPage() {
                 </p>
               </div>
             </div>
-
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -566,14 +517,11 @@ export default function RegisterPage() {
               )}
             </button>
           </form>
-
-          {/* Divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px 0' }}>
             <div style={{ flex: 1, height: 1, background: '#e8f0eb' }} />
             <span style={{ fontSize: 11, color: '#a0b8a9', fontWeight: 500 }}>Already a member?</span>
             <div style={{ flex: 1, height: 1, background: '#e8f0eb' }} />
           </div>
-
           <Link to="/login" style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
             width: '100%', padding: '10px 24px', borderRadius: 10,
@@ -588,7 +536,6 @@ export default function RegisterPage() {
           >
             Log in to existing account <ArrowRight size={13} />
           </Link>
-
           <p style={{ textAlign: 'center', fontSize: 10, color: '#a0b8a9', marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <Star size={9} fill="#a0b8a9" color="#a0b8a9" />
             Trusted by 5,000+ golfers across the UK

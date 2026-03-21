@@ -3,14 +3,11 @@ import { Search, Heart, ExternalLink, Calendar, X } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import api from '../lib/api';
-
-/* ── Inject styles once ── */
 function useStyles() {
   useEffect(() => {
     const el = document.createElement('style');
     el.textContent = `
       @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap');
-
       @keyframes fadeSlideUp {
         from { opacity:0; transform:translateY(24px); }
         to   { opacity:1; transform:translateY(0); }
@@ -94,8 +91,6 @@ function useStyles() {
     return () => document.head.removeChild(el);
   }, []);
 }
-
-/* ── Animated count-in for stat ── */
 function CountUp({ to, suffix = '' }) {
   const [n, setN] = useState(0);
   const ref = useRef(null);
@@ -115,22 +110,17 @@ function CountUp({ to, suffix = '' }) {
   }, [to]);
   return <span ref={ref}>{n}{suffix}</span>;
 }
-
-/* ── Single charity card ── */
 function CharityCard({ c, index }) {
   return (
     <div
       className="charity-card"
       style={{ animation: `cardIn 0.45s ease ${(index % 9) * 0.06}s both` }}
     >
-      {/* shimmer on hover */}
       <div className="card-shimmer" style={{
         position: 'absolute', top: 0, bottom: 0, left: 0, width: '35%',
         background: 'linear-gradient(90deg, transparent, rgba(0,107,58,0.04), transparent)',
         transform: 'translateX(-100%)', pointerEvents: 'none',
       }} />
-
-      {/* top row */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
         {c.logo_url ? (
           <img
@@ -147,7 +137,6 @@ function CharityCard({ c, index }) {
             <Heart className="card-heart" size={22} color="#006B3A" />
           </div>
         )}
-
         {c.featured && (
           <span style={{
             fontSize: 11, fontWeight: 700, letterSpacing: 0.3,
@@ -159,13 +148,11 @@ function CharityCard({ c, index }) {
           </span>
         )}
       </div>
-
       <h3 style={{
         fontFamily: "'Playfair Display', serif",
         fontSize: 16, fontWeight: 700, color: '#0d1f14',
         marginBottom: 8, lineHeight: 1.3,
       }}>{c.name}</h3>
-
       <p style={{
         color: '#64786b', fontSize: 13, lineHeight: 1.65,
         flex: 1, marginBottom: 14,
@@ -201,8 +188,6 @@ function CharityCard({ c, index }) {
     </div>
   );
 }
-
-/* ── Skeleton card ── */
 function SkeletonCard() {
   return (
     <div className="skeleton" style={{
@@ -217,8 +202,6 @@ function SkeletonCard() {
     </div>
   );
 }
-
-/* ── Main page ── */
 export default function CharitiesPage() {
   useStyles();
   const [charities, setCharities] = useState([]);
@@ -235,18 +218,14 @@ export default function CharitiesPage() {
 
   const featured  = charities.filter(c => c.featured).length;
   const withSites = charities.filter(c => c.website).length;
-
   return (
     <div style={{ minHeight: '100vh', background: '#f8fdf9', fontFamily: "'DM Sans', sans-serif" }}>
       <Navbar />
-
-      {/* ── HERO HEADER ── */}
       <section style={{
         position: 'relative', overflow: 'hidden',
         padding: '100px 24px 60px', textAlign: 'center',
         background: 'linear-gradient(180deg, #fff 0%, #f8fdf9 100%)',
       }}>
-        {/* dot grid */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
           backgroundImage: 'radial-gradient(circle, rgba(0,107,58,0.10) 1px, transparent 1px)',
@@ -255,7 +234,6 @@ export default function CharitiesPage() {
           WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%)',
           pointerEvents: 'none',
         }} />
-        {/* spinning ring */}
         <div style={{
           position: 'absolute', top: '5%', left: '-80px', width: 300, height: 300,
           border: '1px solid rgba(0,107,58,0.07)', borderRadius: '50%', zIndex: 0,
@@ -265,7 +243,6 @@ export default function CharitiesPage() {
           position: 'absolute', bottom: '-40px', right: '-60px', width: 240, height: 240,
           border: '1px solid rgba(0,107,58,0.06)', borderRadius: '50%', zIndex: 0,
         }} />
-
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
@@ -299,8 +276,6 @@ export default function CharitiesPage() {
           }}>
             Choose a charity at signup and a portion of your subscription goes directly to them every month.
           </p>
-
-          {/* mini stats */}
           {!loading && charities.length > 0 && (
             <div style={{
               display: 'inline-flex', gap: 0,
@@ -331,11 +306,7 @@ export default function CharitiesPage() {
           )}
         </div>
       </section>
-
-      {/* ── CONTENT ── */}
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 24px 80px' }}>
-
-        {/* Search bar */}
         <div style={{
           position: 'relative', maxWidth: 440,
           margin: '0 auto 40px',
@@ -373,8 +344,6 @@ export default function CharitiesPage() {
             </button>
           )}
         </div>
-
-        {/* loading skeletons */}
         {loading ? (
           <div style={{
             display: 'grid',
@@ -383,10 +352,7 @@ export default function CharitiesPage() {
           }}>
             {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
-
         ) : charities.length === 0 ? (
-
-          /* empty state */
           <div style={{
             textAlign: 'center', padding: '80px 24px',
             animation: 'fadeIn 0.4s ease both',
@@ -418,10 +384,7 @@ export default function CharitiesPage() {
               </button>
             )}
           </div>
-
         ) : (
-
-          /* charity grid */
           <>
             {search && (
               <p style={{

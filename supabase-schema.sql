@@ -1,12 +1,4 @@
--- ================================================================
--- GolfGives Platform — Supabase Schema
--- Run this entire file in the Supabase SQL Editor
--- Then run: cd server && npm install && node seed.js  (to seed users)
--- ================================================================
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- CHARITIES
 CREATE TABLE IF NOT EXISTS charities (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
@@ -19,8 +11,6 @@ CREATE TABLE IF NOT EXISTS charities (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- USERS
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
@@ -37,8 +27,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- SCORES
 CREATE TABLE IF NOT EXISTS scores (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -46,8 +34,6 @@ CREATE TABLE IF NOT EXISTS scores (
   score_date DATE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- DRAWS
 CREATE TABLE IF NOT EXISTS draws (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   draw_date TIMESTAMPTZ NOT NULL,
@@ -64,8 +50,6 @@ CREATE TABLE IF NOT EXISTS draws (
   published_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- DRAW WINNERS
 CREATE TABLE IF NOT EXISTS draw_winners (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   draw_id UUID NOT NULL REFERENCES draws(id) ON DELETE CASCADE,
@@ -79,8 +63,6 @@ CREATE TABLE IF NOT EXISTS draw_winners (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- INDEXES
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_subscription_status ON users(subscription_status);
 CREATE INDEX IF NOT EXISTS idx_users_stripe_subscription ON users(stripe_subscription_id);

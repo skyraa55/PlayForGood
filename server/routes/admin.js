@@ -2,11 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const supabase = require('../lib/supabase');
 const { authenticate, requireAdmin } = require('../middleware/auth');
-
 const router = express.Router();
 router.use(authenticate, requireAdmin);
-
-// GET /api/admin/stats
 router.get('/stats', async (req, res) => {
   try {
     const [usersRes, activeRes, drawsRes, winnersRes] = await Promise.all([
@@ -15,15 +12,12 @@ router.get('/stats', async (req, res) => {
       supabase.from('draws').select('*', { count: 'exact', head: true }),
       supabase.from('draw_winners').select('prize_amount').eq('status', 'pending'),
     ]);
-
     const totalSubscribers = activeRes.count || 0;
     const prizePool = totalSubscribers * 999;
     const charityTotal = Math.floor(prizePool * 0.1);
-
     const pendingPayout = winnersRes.data
       ? winnersRes.data.reduce((sum, w) => sum + (w.prize_amount || 0), 0)
       : 0;
-
     res.json({
       total_users: usersRes.count || 0,
       active_subscribers: totalSubscribers,
@@ -37,8 +31,6 @@ router.get('/stats', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch stats' });
   }
 });
-
-// GET /api/admin/users
 router.get('/users', async (req, res) => {
   try {
     const { page = 1, limit = 20, search, status } = req.query;
@@ -54,8 +46,6 @@ router.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
-
-// PUT /api/admin/users/:id
 router.put('/users/:id', async (req, res) => {
   try {
     const { name, email, subscription_status, role, charity_id, charity_percentage } = req.body;
@@ -67,7 +57,6 @@ router.put('/users/:id', async (req, res) => {
     if (charity_id !== undefined) updates.charity_id = charity_id;
     if (charity_percentage !== undefined) updates.charity_percentage = charity_percentage;
     updates.updated_at = new Date().toISOString();
-
     const { data, error } = await supabase.from('users').update(updates).eq('id', req.params.id).select().single();
     if (error) throw error;
     const { password_hash, ...safeUser } = data;
@@ -76,8 +65,6 @@ router.put('/users/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update user' });
   }
 });
-
-// GET /api/admin/users/:id/scores
 router.get('/users/:id/scores', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -91,8 +78,6 @@ router.get('/users/:id/scores', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch scores' });
   }
 });
-
-// PUT /api/admin/scores/:id
 router.put('/scores/:id', async (req, res) => {
   try {
     const { score, score_date } = req.body;
@@ -105,8 +90,6 @@ router.put('/scores/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update score' });
   }
 });
-
-// GET /api/admin/winners
 router.get('/winners', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -119,11 +102,9 @@ router.get('/winners', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch winners' });
   }
 });
-
-// PUT /api/admin/winners/:id/verify
 router.put('/winners/:id/verify', async (req, res) => {
   try {
-    const { status } = req.body; // approved or rejected
+    const { status } = req.body; 
     if (!['approved', 'rejected'].includes(status)) return res.status(400).json({ error: 'Invalid status' });
     const updates = { verification_status: status, updated_at: new Date().toISOString() };
     if (status === 'approved') updates.status = 'paid';
@@ -134,8 +115,6 @@ router.put('/winners/:id/verify', async (req, res) => {
     res.status(500).json({ error: 'Failed to verify winner' });
   }
 });
-
-// PUT /api/admin/winners/:id/payout
 router.put('/winners/:id/payout', async (req, res) => {
   try {
     const { data, error } = await supabase

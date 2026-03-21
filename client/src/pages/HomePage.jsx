@@ -5,10 +5,6 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import api from '../lib/api';
 import Firework from '../components/FireWork';
-
-/* ─────────────────────────────────────────
-   Floating orb that follows the cursor
-───────────────────────────────────────── */
 function CursorOrb() {
   const orbRef = useRef(null);
   useEffect(() => {
@@ -33,9 +29,6 @@ function CursorOrb() {
   );
 }
 
-/* ─────────────────────────────────────────
-   Animated counter
-───────────────────────────────────────── */
 function CountUp({ end, suffix = '' }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -57,10 +50,6 @@ function CountUp({ end, suffix = '' }) {
   }, [end]);
   return <span ref={ref}>{end.replace(/[\d,]+/, count.toLocaleString())}{suffix}</span>;
 }
-
-/* ─────────────────────────────────────────
-   Number ball
-───────────────────────────────────────── */
 function DrawBall({ n, delay = 0 }) {
   return (
     <div style={{
@@ -73,10 +62,6 @@ function DrawBall({ n, delay = 0 }) {
     }}>{n}</div>
   );
 }
-
-/* ─────────────────────────────────────────
-   Step card
-───────────────────────────────────────── */
 function StepCard({ icon: Icon, title, desc, index }) {
   const [hover, setHover] = useState(false);
   return (
@@ -117,10 +102,6 @@ function StepCard({ icon: Icon, title, desc, index }) {
     </div>
   );
 }
-
-/* ─────────────────────────────────────────
-   Main Page
-───────────────────────────────────────── */
 export default function HomePage() {
   const [charities, setCharities] = useState([]);
   const [latestDraw, setLatestDraw] = useState(null);
@@ -128,7 +109,6 @@ export default function HomePage() {
   const [heroVisible, setHeroVisible] = useState(false);
 
   useEffect(() => {
-    // inject keyframes
     const style = document.createElement('style');
     style.textContent = `
       @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap');
@@ -166,11 +146,9 @@ export default function HomePage() {
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
-
   useEffect(() => {
     setTimeout(() => setHeroVisible(true), 80);
   }, []);
-
   useEffect(() => {
     const handleClick = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -179,37 +157,30 @@ export default function HomePage() {
     window.addEventListener('click', handleClick);
     return () => window.removeEventListener('click', handleClick);
   }, []);
-
   useEffect(() => {
     api.get('/charities?featured=true').then(r => setCharities(r.data.slice(0, 3))).catch(() => {});
     api.get('/draws/latest').then(r => setLatestDraw(r.data)).catch(() => {});
   }, []);
-
   const steps = [
     { icon: Zap, title: 'Subscribe', desc: 'Join monthly or yearly. Cancel anytime.' },
     { icon: Target, title: 'Enter Scores', desc: 'Log your last 5 Stableford scores.' },
     { icon: Trophy, title: 'Win Prizes', desc: 'Match drawn numbers to win from the pool.' },
     { icon: Heart, title: 'Give Back', desc: 'A portion of your sub goes to your chosen charity.' },
   ];
-
   return (
     <div style={{ minHeight: '100vh', background: '#fcfffe', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden' }}>
       {position && <Firework x={position.x} y={position.y} onFinish={() => setPosition(null)} />}
       <CursorOrb />
       <Navbar />
-
-      {/* ── HERO ─────────────────────────────── */}
       <section style={{
         position: 'relative', paddingTop: 112, paddingBottom: 96,
         padding: '112px 24px 96px', textAlign: 'center', overflow: 'hidden',
       }}>
-        {/* mesh bg */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
           background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,107,58,0.10) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        {/* decorative rings */}
         <div style={{
           position: 'absolute', top: '10%', left: '-120px', width: 360, height: 360,
           border: '1.5px solid rgba(0,107,58,0.08)', borderRadius: '50%', zIndex: 0,
@@ -219,10 +190,7 @@ export default function HomePage() {
           position: 'absolute', bottom: '-60px', right: '-80px', width: 280, height: 280,
           border: '1.5px solid rgba(0,107,58,0.07)', borderRadius: '50%', zIndex: 0,
         }} />
-
         <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
-          {/* pill badge */}
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '7px 18px', borderRadius: 999,
@@ -234,7 +202,6 @@ export default function HomePage() {
             <Heart size={13} fill="#006B3A" />
             Golf that gives back
           </div>
-
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
             fontSize: 'clamp(44px, 7vw, 80px)',
@@ -250,7 +217,6 @@ export default function HomePage() {
             }}>Win Prizes.</span><br />
             Change Lives.
           </h1>
-
           <p style={{
             color: '#4a6655', fontSize: 18, maxWidth: 560, margin: '0 auto 40px',
             lineHeight: 1.75,
@@ -259,7 +225,6 @@ export default function HomePage() {
             The subscription platform where your Stableford scores enter monthly prize draws —
             and every subscription drives real charitable impact.
           </p>
-
           <div style={{
             display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14,
             animation: heroVisible ? 'fadeSlideUp 0.6s ease 0.3s both' : 'none',
@@ -292,8 +257,6 @@ export default function HomePage() {
               Browse Charities
             </Link>
           </div>
-
-          {/* Stats */}
           <div style={{
             marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',
             gap: 16, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto',
@@ -318,8 +281,6 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-
-        {/* scroll hint */}
         <div style={{
           position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
           animation: 'floatY 2s ease-in-out infinite', color: '#a0b8a9',
@@ -327,8 +288,6 @@ export default function HomePage() {
           <ChevronDown size={22} />
         </div>
       </section>
-
-      {/* ── HOW IT WORKS ─────────────────────── */}
       <section style={{ padding: '96px 24px', background: '#f8fdf9' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -349,8 +308,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── PRIZE POOL ───────────────────────── */}
       <section style={{ padding: '96px 24px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 56, alignItems: 'center' }}>
 
@@ -393,8 +350,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-
-          {/* Draw card */}
           <div style={{
             background: '#fff',
             border: '1.5px solid #e8f0eb',
@@ -444,8 +399,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── FEATURED CHARITIES ───────────────── */}
       {charities.length > 0 && (
         <section style={{ padding: '96px 24px', background: '#f8fdf9' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -490,14 +443,11 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      {/* ── CTA ──────────────────────────────── */}
       <section style={{
         padding: '80px 24px 100px',
         background: 'linear-gradient(135deg,#003d21 0%,#006B3A 50%,#00873f 100%)',
         textAlign: 'center', position: 'relative', overflow: 'hidden',
       }}>
-        {/* decorative circles */}
         <div style={{
           position: 'absolute', top: -80, right: -80, width: 320, height: 320,
           border: '1.5px solid rgba(255,255,255,0.06)', borderRadius: '50%',
@@ -507,7 +457,6 @@ export default function HomePage() {
           position: 'absolute', bottom: -100, left: -60, width: 280, height: 280,
           border: '1.5px solid rgba(255,255,255,0.05)', borderRadius: '50%',
         }} />
-
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 600, margin: '0 auto' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -518,7 +467,6 @@ export default function HomePage() {
           }}>
             <Star size={11} fill="currentColor" /> JOIN THE COMMUNITY
           </div>
-
           <h2 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(28px,5vw,52px)', fontWeight: 900,
@@ -526,11 +474,9 @@ export default function HomePage() {
           }}>
             Ready to play<br />with purpose?
           </h2>
-
           <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 17, marginBottom: 36, lineHeight: 1.7 }}>
             Join thousands of golfers making a real difference — one round at a time.
           </p>
-
           <Link to="/register" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '16px 40px', borderRadius: 999,
@@ -546,7 +492,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
       <Footer />
     </div>
   );

@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Trophy, Mail, Lock, Eye, EyeOff, ArrowRight, Heart, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-
-/* ── floating golf ball ── */
 function Ball({ style }) {
   return (
     <div style={{
@@ -16,8 +14,6 @@ function Ball({ style }) {
     }} />
   );
 }
-
-/* ── left panel decorative stat ── */
 function Stat({ value, label, delay }) {
   return (
     <div style={{
@@ -32,7 +28,6 @@ function Stat({ value, label, delay }) {
     </div>
   );
 }
-
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -41,7 +36,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState('');
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -96,15 +90,12 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
   return (
     <div style={{
       minHeight: '100vh', display: 'flex',
       fontFamily: "'DM Sans', sans-serif",
       background: '#f7faf8',
     }}>
-
-      {/* ── LEFT PANEL ── */}
       <div style={{
         width: '42%', minWidth: 340,
         background: 'linear-gradient(160deg, #003d21 0%, #006B3A 55%, #00874a 100%)',
@@ -115,9 +106,6 @@ export default function LoginPage() {
       }}
         className="login-left-panel"
       >
-        {/* hide on mobile via inline media query workaround — handled by wrapping div below */}
-
-        {/* topo contour lines */}
         <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.07, pointerEvents: 'none' }} preserveAspectRatio="xMidYMid slice">
           <defs>
             <pattern id="lp-topo" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
@@ -128,8 +116,6 @@ export default function LoginPage() {
           </defs>
           <rect width="100%" height="100%" fill="url(#lp-topo)"/>
         </svg>
-
-        {/* spinning decorative ring */}
         <div style={{
           position: 'absolute', top: -80, right: -80,
           width: 320, height: 320, borderRadius: '50%',
@@ -141,13 +127,9 @@ export default function LoginPage() {
           width: 260, height: 260, borderRadius: '50%',
           border: '1px solid rgba(255,255,255,0.06)',
         }} />
-
-        {/* floating balls */}
         <Ball style={{ top: '18%', right: '12%', width: 18, height: 18, animation: 'floatBall 6s ease-in-out infinite' }} />
         <Ball style={{ top: '55%', right: '22%', width: 11, height: 11, animation: 'floatBall 8s ease-in-out 1s infinite' }} />
         <Ball style={{ top: '75%', right: '8%',  width: 14, height: 14, animation: 'floatBall 7s ease-in-out 2s infinite' }} />
-
-        {/* grass blades at bottom */}
         <svg style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 56, opacity: 0.3, pointerEvents: 'none' }} viewBox="0 0 400 56" preserveAspectRatio="none">
           {Array.from({ length: 28 }, (_, i) => {
             const x = (i / 27) * 390 + 5;
@@ -162,8 +144,6 @@ export default function LoginPage() {
             );
           })}
         </svg>
-
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 'auto', animation: 'fadeUp 0.5s ease both' }}>
           <div style={{
             width: 38, height: 38, borderRadius: 12,
@@ -175,8 +155,6 @@ export default function LoginPage() {
           </div>
           <span style={{ color: '#fff', fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>GolfGives</span>
         </div>
-
-        {/* Main copy */}
         <div style={{ marginBottom: 48 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -188,7 +166,6 @@ export default function LoginPage() {
           }}>
             <Heart size={10} fill="currentColor" /> GOLF THAT GIVES BACK
           </div>
-
           <h2 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(28px,3vw,40px)', fontWeight: 900,
@@ -197,7 +174,6 @@ export default function LoginPage() {
           }}>
             Play with<br />purpose.<br />Win big.
           </h2>
-
           <p style={{
             color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 1.7,
             maxWidth: 280,
@@ -206,8 +182,6 @@ export default function LoginPage() {
             Your Stableford scores enter monthly prize draws — while every subscription supports a charity you love.
           </p>
         </div>
-
-        {/* Stats row */}
         <div style={{
           display: 'flex', gap: 28,
           padding: '20px 24px',
@@ -223,13 +197,10 @@ export default function LoginPage() {
           <Stat value="5K+"   label="Players"     delay={0.6} />
         </div>
       </div>
-
-      {/* ── RIGHT PANEL ── */}
       <div style={{
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '40px 24px', position: 'relative', overflow: 'hidden',
       }}>
-        {/* subtle dot grid */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
           backgroundImage: 'radial-gradient(circle, rgba(0,107,58,0.10) 1px, transparent 1px)',
@@ -238,14 +209,11 @@ export default function LoginPage() {
           WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%)',
           pointerEvents: 'none',
         }} />
-
         <div style={{
           width: '100%', maxWidth: 400,
           position: 'relative', zIndex: 1,
           animation: mounted ? 'fadeUp 0.55s ease 0.15s both' : 'none',
         }}>
-
-          {/* Mobile logo (shown only on small screens via style tag below) */}
           <Link to="/" style={{
             display: 'none', alignItems: 'center', gap: 8,
             justifyContent: 'center', marginBottom: 32,
@@ -260,8 +228,6 @@ export default function LoginPage() {
             </div>
             <span style={{ fontWeight: 700, fontSize: 18, color: '#0d1f14' }}>GolfGives</span>
           </Link>
-
-          {/* Heading */}
           <div style={{ marginBottom: 32 }}>
             <h1 style={{
               fontFamily: "'Playfair Display', serif",
@@ -272,11 +238,7 @@ export default function LoginPage() {
               Sign in to your account to continue
             </p>
           </div>
-
-          {/* Form */}
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-
-            {/* Email */}
             <div>
               <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#2d4a38', marginBottom: 7 }}>
                 Email address
@@ -309,8 +271,6 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-
-            {/* Password */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
                 <label style={{ fontSize: 13, fontWeight: 600, color: '#2d4a38' }}>
@@ -368,8 +328,6 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -388,7 +346,6 @@ export default function LoginPage() {
               onMouseEnter={e => { if (!loading) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(0,107,58,0.38)'; } }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,107,58,0.30)'; }}
             >
-              {/* shimmer on hover */}
               {!loading && (
                 <span style={{
                   position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 12, pointerEvents: 'none',
@@ -413,8 +370,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Divider */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 12,
             margin: '24px 0',
@@ -423,8 +378,6 @@ export default function LoginPage() {
             <span style={{ fontSize: 12, color: '#a0b8a9', fontWeight: 500 }}>New to GolfGives?</span>
             <div style={{ flex: 1, height: 1, background: '#e8f0eb' }} />
           </div>
-
-          {/* Sign up link */}
           <Link to="/register" style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             width: '100%', padding: '12px 24px',
@@ -441,8 +394,6 @@ export default function LoginPage() {
           >
             Create a free account <ArrowRight size={15} />
           </Link>
-
-          {/* Trust line */}
           <p style={{ textAlign: 'center', fontSize: 11, color: '#a0b8a9', marginTop: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <Star size={10} fill="#a0b8a9" color="#a0b8a9" />
             Trusted by 5,000+ golfers across the UK
@@ -450,8 +401,6 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-
-      {/* responsive: hide left panel on small screens */}
       <style>{`
         @media (max-width: 680px) {
           .login-left-panel { display: none !important; }

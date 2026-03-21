@@ -3,8 +3,6 @@ import { Trophy, Calendar, ChevronRight, Star, Zap, RotateCcw } from 'lucide-rea
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import api from '../lib/api';
-
-/* ── inject styles ── */
 function useStyles() {
   useEffect(() => {
     const el = document.createElement('style');
@@ -116,8 +114,6 @@ function MatchBadge({ type }) {
     </span>
   );
 }
-
-/* ── animated draw ball ── */
 function DrawBall({ n, delay = 0 }) {
   return (
     <div style={{
@@ -130,7 +126,6 @@ function DrawBall({ n, delay = 0 }) {
       animation: `ballDrop 0.45s cubic-bezier(.34,1.56,.64,1) ${delay}s both, ballGlow 2.5s ease-in-out ${delay + 0.5}s infinite`,
       position: 'relative',
     }}>
-      {/* shine dot */}
       <div style={{
         position:'absolute', top:9, left:13,
         width:8, height:8, borderRadius:'50%',
@@ -141,7 +136,7 @@ function DrawBall({ n, delay = 0 }) {
   );
 }
 
-/* ── prize tile ── */
+
 function PrizeTile({ label, amount, accent, icon }) {
   return (
     <div className="prize-tile" style={{
@@ -161,7 +156,7 @@ function PrizeTile({ label, amount, accent, icon }) {
   );
 }
 
-/* ── skeleton draw detail ── */
+
 function SkeletonDetail() {
   return (
     <div className="skeleton" style={{ background:'#fff', border:'1.5px solid #e8f0eb', borderRadius:20, padding:28 }}>
@@ -181,8 +176,6 @@ function SkeletonDetail() {
     </div>
   );
 }
-
-/* ── main page ── */
 export default function DrawsPage() {
   useStyles();
   const [draws, setDraws]     = useState([]);
@@ -207,18 +200,14 @@ export default function DrawsPage() {
   };
 
   const fmt = (d) => new Date(d).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-
   return (
     <div style={{ minHeight:'100vh', background:'#f8fdf9', fontFamily:"'DM Sans',sans-serif" }}>
       <Navbar />
-
-      {/* ── HERO ── */}
       <section style={{
         position:'relative', overflow:'hidden',
         padding:'100px 24px 56px', textAlign:'center',
         background:'linear-gradient(180deg,#fff 0%,#f8fdf9 100%)',
       }}>
-        {/* dot grid */}
         <div style={{
           position:'absolute', inset:0, zIndex:0,
           backgroundImage:'radial-gradient(circle, rgba(0,107,58,0.10) 1px, transparent 1px)',
@@ -248,7 +237,6 @@ export default function DrawsPage() {
           }}>
             <Trophy size={12} fill="#b45309" /> Monthly Draws
           </div>
-
           <h1 style={{
             fontFamily:"'Playfair Display',serif",
             fontSize:'clamp(34px,5vw,58px)', fontWeight:900,
@@ -262,7 +250,6 @@ export default function DrawsPage() {
               WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',
             }}>Results</span>
           </h1>
-
           <p style={{
             color:'#4a6655', fontSize:16, lineHeight:1.75,
             maxWidth:480, margin:'0 auto',
@@ -272,10 +259,7 @@ export default function DrawsPage() {
           </p>
         </div>
       </section>
-
-      {/* ── CONTENT ── */}
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 24px 80px' }}>
-
         {loading ? (
           <div style={{ display:'flex', justifyContent:'center', padding:'60px 0' }}>
             <div style={{
@@ -299,11 +283,8 @@ export default function DrawsPage() {
             </h3>
             <p style={{ color:'#7a9585', fontSize:14 }}>Check back soon — the first draw is coming!</p>
           </div>
-
         ) : (
           <div style={{ display:'grid', gridTemplateColumns:'300px 1fr', gap:24, alignItems:'start' }}>
-
-            {/* ── DRAW LIST ── */}
             <div style={{ animation:'fadeSlideUp 0.5s ease 0.25s both' }}>
               <p style={{
                 fontSize:11, fontWeight:700, color:'#006B3A',
@@ -343,8 +324,6 @@ export default function DrawsPage() {
                 ))}
               </div>
             </div>
-
-            {/* ── SELECTED DRAW DETAIL ── */}
             {selected && (
               <div
                 key={selected.id}
@@ -355,7 +334,6 @@ export default function DrawsPage() {
                   animation:'fadeSlideUp 0.4s ease both',
                 }}
               >
-                {/* header row */}
                 <div style={{
                   display:'flex', alignItems:'flex-start',
                   justifyContent:'space-between', flexWrap:'wrap',
@@ -398,8 +376,6 @@ export default function DrawsPage() {
                     <div style={{ fontSize:11, color:'#7a9585', fontWeight:600, marginTop:3 }}>Total Pool</div>
                   </div>
                 </div>
-
-                {/* drawn numbers */}
                 <div style={{ marginBottom:28 }}>
                   <p style={{
                     fontSize:11, fontWeight:700, color:'#006B3A',
@@ -411,8 +387,6 @@ export default function DrawsPage() {
                     ))}
                   </div>
                 </div>
-
-                {/* prize breakdown */}
                 <div style={{ marginBottom: selected.jackpot_won === false ? 16 : 0 }}>
                   <p style={{
                     fontSize:11, fontWeight:700, color:'#006B3A',
@@ -439,8 +413,6 @@ export default function DrawsPage() {
                     />
                   </div>
                 </div>
-
-                {/* rollover banner */}
                 {!selected.jackpot_won && (
                   <div style={{
                     marginTop:16, padding:'14px 18px',
@@ -464,8 +436,6 @@ export default function DrawsPage() {
             )}
           </div>
         )}
-
-        {/* ── HOW IT WORKS ── */}
         <div style={{
           marginTop:48,
           background:'#fff', border:'1.5px solid #e8f0eb',

@@ -2,13 +2,11 @@ const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const supabase = require('../lib/supabase');
 const { authenticate } = require('../middleware/auth');
-
 const router = express.Router();
-
 const PLANS = {
   monthly: {
     price_id: process.env.STRIPE_MONTHLY_PRICE_ID,
-    amount: 999, // £9.99 in pence
+    amount: 999, 
     interval: 'month',
   },
   yearly: {
@@ -17,17 +15,12 @@ const PLANS = {
     interval: 'year',
   },
 };
-
-// POST /api/subscriptions/checkout - Create Stripe checkout session
 router.post('/checkout', authenticate, async (req, res) => {
   try {
     const { plan } = req.body;
     if (!PLANS[plan]) return res.status(400).json({ error: 'Invalid plan. Use monthly or yearly' });
-
     const planData = PLANS[plan];
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-
-    // If user has no Stripe customer, create one
     let customerId = req.user.stripe_customer_id;
     if (!customerId) {
       const customer = await stripe.customers.create({
@@ -38,7 +31,6 @@ router.post('/checkout', authenticate, async (req, res) => {
       customerId = customer.id;
       await supabase.from('users').update({ stripe_customer_id: customerId }).eq('id', req.user.id);
     }
-
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
@@ -56,15 +48,12 @@ router.post('/checkout', authenticate, async (req, res) => {
       success_url: `${clientUrl}/dashboard?subscription=success`,
       cancel_url: `${clientUrl}/subscribe?cancelled=true`,
     });
-
     res.json({ url: session.url, session_id: session.id });
   } catch (err) {
     console.error('Checkout error:', err);
     res.status(500).json({ error: 'Failed to create checkout session' });
   }
 });
-
-// POST /api/subscriptions/cancel
 router.post('/cancel', authenticate, async (req, res) => {
   try {
     if (!req.user.stripe_subscription_id) {
@@ -80,8 +69,6 @@ router.post('/cancel', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to cancel subscription' });
   }
 });
-
-// GET /api/subscriptions/status
 router.get('/status', authenticate, async (req, res) => {
   try {
     const { data: user } = await supabase
@@ -94,8 +81,6 @@ router.get('/status', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch subscription status' });
   }
 });
-
-// POST /api/subscriptions/portal - Stripe billing portal
 router.post('/portal', authenticate, async (req, res) => {
   try {
     if (!req.user.stripe_customer_id) return res.status(400).json({ error: 'No customer found' });

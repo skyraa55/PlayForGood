@@ -1,20 +1,16 @@
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const supabase = require('../lib/supabase');
-
 const router = express.Router();
-
 router.post('/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
-
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature error:', err.message);
     return res.status(400).json({ error: 'Webhook signature verification failed' });
   }
-
   try {
     switch (event.type) {
       case 'checkout.session.completed': {

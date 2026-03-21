@@ -1,10 +1,7 @@
 const express = require('express');
 const supabase = require('../lib/supabase');
 const { authenticate, requireAdmin } = require('../middleware/auth');
-
 const router = express.Router();
-
-// GET /api/charities
 router.get('/', async (req, res) => {
   try {
     const { search, featured } = req.query;
@@ -19,8 +16,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch charities' });
   }
 });
-
-// GET /api/charities/:id
 router.get('/:id', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -35,8 +30,6 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch charity' });
   }
 });
-
-// POST /api/charities (Admin)
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
     const { name, description, logo_url, website, featured, events } = req.body;
@@ -52,8 +45,6 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
     res.status(500).json({ error: 'Failed to create charity' });
   }
 });
-
-// PUT /api/charities/:id (Admin)
 router.put('/:id', authenticate, requireAdmin, async (req, res) => {
   try {
     const { name, description, logo_url, website, featured, events, active } = req.body;
@@ -70,7 +61,6 @@ router.put('/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
-// DELETE /api/charities/:id (Admin)
 router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
   try {
     await supabase.from('charities').update({ active: false }).eq('id', req.params.id);

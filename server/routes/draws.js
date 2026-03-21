@@ -4,15 +4,12 @@ const { authenticate } = require('../middleware/auth');
 const { requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
-
-// Helper: calculate prize pool from active subscribers
 async function calculatePrizePool() {
   const { count } = await supabase
     .from('users')
     .select('*', { count: 'exact', head: true })
     .eq('subscription_status', 'active');
-
-  const monthlyRate = 999; // 9.99 GBP in pence
+  const monthlyRate = 999; 
   const totalPool = (count || 0) * monthlyRate;
   return {
     total: totalPool,
@@ -22,15 +19,11 @@ async function calculatePrizePool() {
     active_subscribers: count || 0,
   };
 }
-
-// Helper: get all active user scores
 async function getActiveUserScores() {
   const { data } = await supabase
     .from('scores')
     .select('user_id, score')
     .order('score_date', { ascending: false });
-
-  // Group by user_id, keep last 5 per user
   const userScores = {};
   if (data) {
     for (const row of data) {
@@ -40,22 +33,17 @@ async function getActiveUserScores() {
   }
   return userScores;
 }
-
-// Helper: run draw logic
 function runDrawLogic(method, allUserScores) {
   const allScores = Object.values(allUserScores).flat();
   let drawnNumbers = [];
-
   if (method === 'random') {
     const unique = new Set();
     while (unique.size < 5) unique.add(Math.floor(Math.random() * 45) + 1);
     drawnNumbers = [...unique].sort((a, b) => a - b);
   } else {
-    // Algorithmic: weighted by frequency (least frequent = more likely, balances pool)
     const freq = {};
     for (let i = 1; i <= 45; i++) freq[i] = 0;
     allScores.forEach(s => { if (freq[s] !== undefined) freq[s]++; });
-    // Weight inversely proportional to frequency
     const weights = Object.entries(freq).map(([num, count]) => ({
       num: parseInt(num),
       weight: 1 / (count + 1),
@@ -75,12 +63,9 @@ function runDrawLogic(method, allUserScores) {
   }
   return drawnNumbers;
 }
-
-// Helper: find winners
 function findWinners(drawnNumbers, userScores) {
   const drawn = new Set(drawnNumbers);
   const results = { five_match: [], four_match: [], three_match: [] };
-
   for (const [userId, scores] of Object.entries(userScores)) {
     const userSet = new Set(scores);
     const matches = [...userSet].filter(s => drawn.has(s)).length;
@@ -90,8 +75,6 @@ function findWinners(drawnNumbers, userScores) {
   }
   return results;
 }
-
-// GET /api/draws - list all draws
 router.get('/', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -105,8 +88,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch draws' });
   }
 });
-
-// GET /api/draws/latest - latest published draw
 router.get('/latest', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -122,8 +103,6 @@ router.get('/latest', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch latest draw' });
   }
 });
-
-// GET /api/draws/my-results - user's draw results
 router.get('/my-results', authenticate, async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -137,8 +116,6 @@ router.get('/my-results', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch results' });
   }
 });
-
-// POST /api/draws/simulate (Admin)
 router.post('/simulate', authenticate, requireAdmin, async (req, res) => {
   try {
     const { method = 'random' } = req.body;
@@ -162,8 +139,6 @@ router.post('/simulate', authenticate, requireAdmin, async (req, res) => {
     res.status(500).json({ error: 'Simulation failed' });
   }
 });
-
-// POST /api/draws/run (Admin) - run and save draw
 router.post('/run', authenticate, requireAdmin, async (req, res) => {
   try {
     const { method = 'random', draw_date, jackpot_rollover = 0 } = req.body;
@@ -181,8 +156,6 @@ router.post('/run', authenticate, requireAdmin, async (req, res) => {
       ? Math.floor(prizePool.four_match / winners.four_match.length) : 0;
     const threeMatchPerWinner = winners.three_match.length > 0
       ? Math.floor(prizePool.three_match / winners.three_match.length) : 0;
-
-    // Insert draw
     const { data: draw, error: drawError } = await supabase
       .from('draws')
       .insert({
@@ -202,8 +175,6 @@ router.post('/run', authenticate, requireAdmin, async (req, res) => {
       .single();
 
     if (drawError) throw drawError;
-
-    // Insert winners
     const winnerRows = [];
     for (const uid of winners.five_match) {
       winnerRows.push({ draw_id: draw.id, user_id: uid, match_type: 'five_match', prize_amount: jackpotPerWinner, status: 'pending' });
@@ -214,11 +185,9 @@ router.post('/run', authenticate, requireAdmin, async (req, res) => {
     for (const uid of winners.three_match) {
       winnerRows.push({ draw_id: draw.id, user_id: uid, match_type: 'three_match', prize_amount: threeMatchPerWinner, status: 'pending' });
     }
-
     if (winnerRows.length > 0) {
       await supabase.from('draw_winners').insert(winnerRows);
     }
-
     res.status(201).json({ draw, winner_counts: {
       five_match: winners.five_match.length,
       four_match: winners.four_match.length,
@@ -229,8 +198,6 @@ router.post('/run', authenticate, requireAdmin, async (req, res) => {
     res.status(500).json({ error: 'Draw failed' });
   }
 });
-
-// POST /api/draws/:id/publish (Admin)
 router.post('/:id/publish', authenticate, requireAdmin, async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -245,8 +212,6 @@ router.post('/:id/publish', authenticate, requireAdmin, async (req, res) => {
     res.status(500).json({ error: 'Failed to publish draw' });
   }
 });
-
-// GET /api/draws/:id/winners (Admin)
 router.get('/:id/winners', authenticate, requireAdmin, async (req, res) => {
   try {
     const { data, error } = await supabase

@@ -3,8 +3,6 @@ const supabase = require('../lib/supabase');
 const { authenticate, requireSubscription } = require('../middleware/auth');
 
 const router = express.Router();
-
-// GET /api/scores - get my scores
 router.get('/', authenticate, async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -19,8 +17,6 @@ router.get('/', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch scores' });
   }
 });
-
-// POST /api/scores - add a score
 router.post('/', authenticate, requireSubscription, async (req, res) => {
   try {
     const { score, score_date } = req.body;
@@ -28,19 +24,14 @@ router.post('/', authenticate, requireSubscription, async (req, res) => {
     if (!score || !score_date) return res.status(400).json({ error: 'Score and date required' });
     const s = parseInt(score);
     if (isNaN(s) || s < 1 || s > 45) return res.status(400).json({ error: 'Score must be 1–45 (Stableford)' });
-
-    // Check if we already have 5 scores — remove oldest
     const { data: existing } = await supabase
       .from('scores')
       .select('id, score_date')
       .eq('user_id', req.user.id)
       .order('score_date', { ascending: true });
-
     if (existing && existing.length >= 5) {
-      // Delete the oldest
       await supabase.from('scores').delete().eq('id', existing[0].id);
     }
-
     const { data, error } = await supabase
       .from('scores')
       .insert({ user_id: req.user.id, score: s, score_date })
@@ -54,14 +45,11 @@ router.post('/', authenticate, requireSubscription, async (req, res) => {
     res.status(500).json({ error: 'Failed to add score' });
   }
 });
-
-// PUT /api/scores/:id - edit a score
 router.put('/:id', authenticate, requireSubscription, async (req, res) => {
   try {
     const { score, score_date } = req.body;
     const s = parseInt(score);
     if (isNaN(s) || s < 1 || s > 45) return res.status(400).json({ error: 'Score must be 1–45' });
-
     const { data, error } = await supabase
       .from('scores')
       .update({ score: s, score_date })
@@ -69,7 +57,6 @@ router.put('/:id', authenticate, requireSubscription, async (req, res) => {
       .eq('user_id', req.user.id)
       .select()
       .single();
-
     if (error) throw error;
     if (!data) return res.status(404).json({ error: 'Score not found' });
     res.json(data);
@@ -77,8 +64,6 @@ router.put('/:id', authenticate, requireSubscription, async (req, res) => {
     res.status(500).json({ error: 'Failed to update score' });
   }
 });
-
-// DELETE /api/scores/:id
 router.delete('/:id', authenticate, requireSubscription, async (req, res) => {
   try {
     const { error } = await supabase

@@ -2,10 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const supabase = require('../lib/supabase');
 const { authenticate } = require('../middleware/auth');
-
 const router = express.Router();
-
-// GET /api/users/profile
 router.get('/profile', authenticate, async (req, res) => {
   try {
     const { data: user, error } = await supabase
@@ -20,8 +17,6 @@ router.get('/profile', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch profile' });
   }
 });
-
-// PUT /api/users/profile
 router.put('/profile', authenticate, async (req, res) => {
   try {
     const { name, charity_id, charity_percentage } = req.body;
@@ -34,7 +29,6 @@ router.put('/profile', authenticate, async (req, res) => {
       updates.charity_percentage = charity_percentage;
     }
     updates.updated_at = new Date().toISOString();
-
     const { data, error } = await supabase
       .from('users')
       .update(updates)
@@ -49,8 +43,6 @@ router.put('/profile', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to update profile' });
   }
 });
-
-// PUT /api/users/password
 router.put('/password', authenticate, async (req, res) => {
   try {
     const { current_password, new_password } = req.body;

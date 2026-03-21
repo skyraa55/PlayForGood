@@ -6,7 +6,7 @@ A full-stack web application combining golf performance tracking, monthly prize 
 
 ---
 
-## 🚀 DEPLOYMENT GUIDE (Step by Step)
+##  DEPLOYMENT GUIDE (Step by Step)
 
 ### STEP 1 — Set up Supabase
 
@@ -89,7 +89,7 @@ Now that backend is live, add the webhook URL in Stripe (see Step 2, point 5) us
 
 ---
 
-## 🔑 Default Credentials
+## Default Credentials
 
 | Role  | Email                  | Password  |
 |-------|------------------------|-----------|
@@ -100,7 +100,7 @@ Now that backend is live, add the webhook URL in Stripe (see Step 2, point 5) us
 
 ---
 
-## 📋 Form URLs to Fill In
+##  Form URLs to Fill In
 
 | Field                  | Value                                          |
 |------------------------|------------------------------------------------|
@@ -113,7 +113,7 @@ Now that backend is live, add the webhook URL in Stripe (see Step 2, point 5) us
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 golf-charity-platform/
@@ -157,7 +157,7 @@ golf-charity-platform/
 
 ---
 
-## ✅ Feature Checklist
+## Feature Checklist
 
 - [x] User signup & login (JWT auth)
 - [x] Monthly & yearly subscription (Stripe Checkout)
@@ -176,7 +176,7 @@ golf-charity-platform/
 
 ---
 
-## 🛠 Local Development
+##  Local Development
 
 ```bash
 # Install all dependencies
