@@ -82,8 +82,9 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const user = await login(form.email, form.password);
+     console.log('Full user object:', user);
       toast.success(`Welcome back, ${user.name}!`);
-      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+      navigate(user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {

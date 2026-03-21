@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './hooks/useAuth';
-
-// Pages
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -30,10 +28,14 @@ function AdminRoute({ children }) {
 
 function PublicOnlyRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]"><div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" /></div>;
-  return user ? <Navigate to="/dashboard" replace /> : children;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+    <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+  </div>;
+  if (user) {
+    return <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace />;
+  }
+  return children;
 }
-
 function AppRoutes() {
   return (
     <Routes>

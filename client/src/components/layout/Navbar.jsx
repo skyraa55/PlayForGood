@@ -9,29 +9,49 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const handleLogout = () => { logout(); navigate('/'); setDropdownOpen(false); setMobileOpen(false); };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setDropdownOpen(false);
+    setMobileOpen(false);
+  };
+
   const isActive = (path) => location.pathname === path;
+
   const navLinks = [
     { to: '/',          label: 'Home',      icon: Home   },
     { to: '/charities', label: 'Charities', icon: Heart  },
     { to: '/draws',     label: 'Draws',     icon: Trophy },
   ];
+
   const navRef   = useRef(null);
   const linkRefs = useRef([]);
-  const [pill, setPill]       = useState({ left: 0, width: 0, opacity: 0 });
+  const [pill, setPill]         = useState({ left: 0, width: 0, opacity: 0 });
   const [pillReady, setPillReady] = useState(false);
+
   useLayoutEffect(() => {
     const activeIdx = navLinks.findIndex(({ to }) => isActive(to));
-    const idx = activeIdx === -1 ? 0 : activeIdx;
-    const el  = linkRefs.current[idx];
+
+    // ✅ No matching nav link (e.g. on /dashboard, /admin) — hide the pill
+    if (activeIdx === -1) {
+      setPill({ left: 0, width: 0, opacity: 0 });
+      setPillReady(true);
+      return;
+    }
+
+    const el  = linkRefs.current[activeIdx];
     const box = navRef.current;
     if (!el || !box) return;
+
     const cr = box.getBoundingClientRect();
     const er = el.getBoundingClientRect();
     setPill({ left: er.left - cr.left, width: er.width, opacity: 1 });
+
     const t = setTimeout(() => setPillReady(true), 30);
     return () => clearTimeout(t);
   }, [location.pathname]);
+
   return (
     <>
       <style>{`
@@ -97,6 +117,7 @@ export default function Navbar() {
           transition: color 0.2s ease;
           white-space: nowrap;
         }
+        /* ✅ White text when pill is over this link */
         .nb-link.active { color: #fff; }
         .nb-link:not(.active) { color: #64786b; }
         .nb-link:not(.active):hover { color: #006B3A; }
@@ -205,29 +226,35 @@ export default function Navbar() {
           transition: background 0.15s, color 0.15s;
           margin-bottom: 4px;
         }
-        .nb-mob-link:hover, .nb-mob-link.active { background: #f0f7f3; color: #006B3A; }
-        .nb-mob-link.active { color: #006B3A; }
+        .nb-mob-link:hover { background: #f0f7f3; color: #006B3A; }
+        /* ✅ Active mobile link — green bg + green text */
+        .nb-mob-link.active { background: #f0f7f3; color: #006B3A; }
         .nb-mob-divider { height: 1px; background: #e8f0eb; margin: 10px 0; }
         .nb-mob-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 
         @media (max-width: 767px) {
-          .nb-links { display: none; }
-          .nb-right  { display: none; }
+          .nb-links    { display: none; }
+          .nb-right    { display: none; }
           .nb-mob-toggle { display: flex; align-items: center; justify-content: center; }
         }
         @media (min-width: 768px) {
           .nb-mob-toggle { display: none; }
         }
       `}</style>
+
       <nav className="nb-root">
         <div className="nb-bar">
           <div className="nb-inner">
+
+            {/* Logo */}
             <Link to="/" className="nb-logo">
               <div className="nb-logo-icon">
                 <Trophy size={17} color="#fff" />
               </div>
-              <span className="nb-logo-text">PlayForGood</span>
+              <span className="nb-logo-text">GolfGives</span>
             </Link>
+
+            {/* Desktop nav links */}
             <div className="nb-links" ref={navRef}>
               <span
                 aria-hidden="true"
@@ -237,7 +264,7 @@ export default function Navbar() {
                   width: pill.width,
                   opacity: pill.opacity,
                   transition: pillReady
-                    ? 'left 0.32s cubic-bezier(0.4,0,0.2,1), width 0.32s cubic-bezier(0.4,0,0.2,1)'
+                    ? 'left 0.32s cubic-bezier(0.4,0,0.2,1), width 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease'
                     : 'none',
                 }}
               />
@@ -253,6 +280,8 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
+
+            {/* Desktop right side */}
             <div className="nb-right">
               {user ? (
                 <div style={{ position: 'relative' }}>
@@ -262,33 +291,57 @@ export default function Navbar() {
                     <ChevronDown
                       size={13}
                       color="#7a9585"
-                      style={{ transition: 'transform 0.2s', transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)' }}
+                      style={{
+                        transition: 'transform 0.2s',
+                        transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      }}
                     />
                   </button>
+
                   {dropdownOpen && (
                     <>
+                      {/* Backdrop to close dropdown */}
                       <div
                         style={{ position: 'fixed', inset: 0, zIndex: 55 }}
                         onClick={() => setDropdownOpen(false)}
                       />
                       <div className="nb-dropdown">
                         <div className="nb-dropdown-head">
-                          <p style={{ fontSize: 13, fontWeight: 700, color: '#0d1f14', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <p style={{
+                            fontSize: 13, fontWeight: 700, color: '#0d1f14',
+                            marginBottom: 2, overflow: 'hidden',
+                            textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
                             {user.name}
                           </p>
-                          <p style={{ fontSize: 11, color: '#7a9585', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <p style={{
+                            fontSize: 11, color: '#7a9585',
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
                             {user.email}
                           </p>
                         </div>
-                        <Link to="/dashboard" className="nb-drop-item" onClick={() => setDropdownOpen(false)}>
+
+                        <Link
+                          to="/dashboard"
+                          className="nb-drop-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
                           <LayoutDashboard size={14} color="#006B3A" /> Dashboard
                         </Link>
+
                         {user.role === 'admin' && (
-                          <Link to="/admin" className="nb-drop-item" onClick={() => setDropdownOpen(false)}>
+                          <Link
+                            to="/admin"
+                            className="nb-drop-item"
+                            onClick={() => setDropdownOpen(false)}
+                          >
                             <Shield size={14} color="#7c3aed" /> Admin Panel
                           </Link>
                         )}
+
                         <div className="nb-drop-divider" />
+
                         <button className="nb-drop-item danger" onClick={handleLogout}>
                           <LogOut size={14} /> Log out
                         </button>
@@ -303,49 +356,70 @@ export default function Navbar() {
                 </>
               )}
             </div>
+
+            {/* Mobile hamburger */}
             <button className="nb-mob-toggle" onClick={() => setMobileOpen(v => !v)}>
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-
           </div>
         </div>
+
+        {/* Mobile drawer */}
         {mobileOpen && (
           <div className="nb-mob-drawer">
             {navLinks.map(({ to, label, icon: Icon }) => (
               <Link
-                key={to} to={to}
+                key={to}
+                to={to}
                 className={`nb-mob-link ${isActive(to) ? 'active' : ''}`}
                 onClick={() => setMobileOpen(false)}
               >
                 <Icon size={16} /> {label}
               </Link>
             ))}
+
             <div className="nb-mob-divider" />
+
             {user ? (
               <>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', marginBottom: 8 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '10px 14px', marginBottom: 8,
+                }}>
                   <div className="nb-avatar">{user.name?.charAt(0).toUpperCase()}</div>
                   <div>
                     <p style={{ fontSize: 13, fontWeight: 700, color: '#0d1f14' }}>{user.name}</p>
                     <p style={{ fontSize: 11, color: '#7a9585' }}>{user.email}</p>
                   </div>
                 </div>
-                <Link to="/dashboard" className="nb-mob-link" onClick={() => setMobileOpen(false)}>
+
+                <Link
+                  to="/dashboard"
+                  className={`nb-mob-link ${isActive('/dashboard') ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
                   <LayoutDashboard size={16} /> Dashboard
                 </Link>
+
                 {user.role === 'admin' && (
-                  <Link to="/admin" className="nb-mob-link" onClick={() => setMobileOpen(false)}>
+                  <Link
+                    to="/admin"
+                    className={`nb-mob-link ${isActive('/admin') ? 'active' : ''}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
                     <Shield size={16} /> Admin Panel
                   </Link>
                 )}
+
                 <div className="nb-mob-divider" />
+
                 <button
                   onClick={handleLogout}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '11px 14px', borderRadius: 10, border: 'none',
                     background: '#fef2f2', color: '#ef4444', cursor: 'pointer',
-                    width: '100%', fontFamily: "'DM Sans',sans-serif",
+                    width: '100%', fontFamily: "'DM Sans', sans-serif",
                     fontSize: 14, fontWeight: 600,
                   }}
                 >
