@@ -251,7 +251,7 @@ export default function Navbar() {
               <div className="nb-logo-icon">
                 <Trophy size={17} color="#fff" />
               </div>
-              <span className="nb-logo-text">GolfGives</span>
+              <span className="nb-logo-text">PlayForGood</span>
             </Link>
 
             {/* Desktop nav links */}

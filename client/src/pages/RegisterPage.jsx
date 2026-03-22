@@ -199,7 +199,7 @@ export default function RegisterPage() {
           }}>
             <Trophy size={15} color="#fff" />
           </div>
-          <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, letterSpacing: -0.3 }}>GolfGives</span>
+          <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, letterSpacing: -0.3 }}>PlayForGood</span>
         </div>
         <div style={{ marginBottom: 20, flex: 1 }}>
           <div style={{
