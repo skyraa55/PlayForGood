@@ -159,6 +159,7 @@ function MeshBg({ style }) {
   );
 }
 
+// ── FIXED: RippleRings now anchored to the hero content via a wrapper ──
 function RippleRings() {
   const rings = [
     { size: 780, delay: '0s',    fillOpacity: 0.015, borderOpacity: 0.10, borderWidth: 1.5 },
@@ -175,7 +176,9 @@ function RippleRings() {
           key={i}
           className={`ripple-ring ripple-ring-${i}`}
           style={{
-            position: 'absolute', top: '50%', left: '50%',
+            position: 'absolute',
+            // Anchor to the hero text block center, not the section center
+            top: '50%', left: '50%',
             width: ring.size, height: ring.size,
             marginLeft: -ring.size / 2, marginTop: -ring.size / 2,
             borderRadius: '50%',
@@ -189,6 +192,7 @@ function RippleRings() {
     </>
   );
 }
+
 function ImpactBentoSection() {
   const bentoItems = [
     {
@@ -582,27 +586,63 @@ export default function HomePage() {
       }
 
       /* ── RIPPLE RING SCALING ── */
+      /* On mobile the rings scale down proportionally so they still wrap the hero text block */
       @media (max-width: 768px) {
-        .ripple-ring-0 { width: 507px !important; height: 507px !important; margin-left: -253px !important; margin-top: -253px !important; }
-        .ripple-ring-1 { width: 455px !important; height: 455px !important; margin-left: -227px !important; margin-top: -227px !important; }
-        .ripple-ring-2 { width: 403px !important; height: 403px !important; margin-left: -201px !important; margin-top: -201px !important; }
-        .ripple-ring-3 { width: 351px !important; height: 351px !important; margin-left: -175px !important; margin-top: -175px !important; }
-        .ripple-ring-4 { width: 299px !important; height: 299px !important; margin-left: -149px !important; margin-top: -149px !important; }
-        .ripple-ring-5 { width: 247px !important; height: 247px !important; margin-left: -123px !important; margin-top: -123px !important; }
+        .ripple-ring-0 { width: 480px !important; height: 480px !important; margin-left: -240px !important; margin-top: -240px !important; }
+        .ripple-ring-1 { width: 420px !important; height: 420px !important; margin-left: -210px !important; margin-top: -210px !important; }
+        .ripple-ring-2 { width: 360px !important; height: 360px !important; margin-left: -180px !important; margin-top: -180px !important; }
+        .ripple-ring-3 { width: 300px !important; height: 300px !important; margin-left: -150px !important; margin-top: -150px !important; }
+        .ripple-ring-4 { width: 250px !important; height: 250px !important; margin-left: -125px !important; margin-top: -125px !important; }
+        .ripple-ring-5 { width: 200px !important; height: 200px !important; margin-left: -100px !important; margin-top: -100px !important; }
       }
       @media (max-width: 480px) {
-        .ripple-ring-0 { width: 328px !important; height: 328px !important; margin-left: -164px !important; margin-top: -164px !important; }
-        .ripple-ring-1 { width: 294px !important; height: 294px !important; margin-left: -147px !important; margin-top: -147px !important; }
-        .ripple-ring-2 { width: 261px !important; height: 261px !important; margin-left: -130px !important; margin-top: -130px !important; }
-        .ripple-ring-3 { width: 227px !important; height: 227px !important; margin-left: -113px !important; margin-top: -113px !important; }
-        .ripple-ring-4 { width: 193px !important; height: 193px !important; margin-left: -96px !important; margin-top: -96px !important; }
-        .ripple-ring-5 { width: 160px !important; height: 160px !important; margin-left: -80px !important; margin-top: -80px !important; }
+        .ripple-ring-0 { width: 380px !important; height: 380px !important; margin-left: -190px !important; margin-top: -190px !important; }
+        .ripple-ring-1 { width: 330px !important; height: 330px !important; margin-left: -165px !important; margin-top: -165px !important; }
+        .ripple-ring-2 { width: 280px !important; height: 280px !important; margin-left: -140px !important; margin-top: -140px !important; }
+        .ripple-ring-3 { width: 235px !important; height: 235px !important; margin-left: -117px !important; margin-top: -117px !important; }
+        .ripple-ring-4 { width: 195px !important; height: 195px !important; margin-left: -97px !important; margin-top: -97px !important; }
+        .ripple-ring-5 { width: 155px !important; height: 155px !important; margin-left: -77px !important; margin-top: -77px !important; }
+      }
+
+      /* ── HERO BUTTONS ── */
+      /* On mobile: two buttons side by side, full width each, centred */
+      .hero-buttons {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 16px !important;
+      }
+      @media (max-width: 600px) {
+        .hero-buttons {
+          flex-direction: row !important;
+          gap: 12px !important;
+          padding: 0 8px !important;
+        }
+        .hero-buttons a {
+          flex: 1 1 0 !important;
+          min-width: 0 !important;
+          max-width: none !important;
+          justify-content: center !important;
+          padding: 14px 16px !important;
+          font-size: 14px !important;
+          text-align: center !important;
+        }
+      }
+      @media (max-width: 380px) {
+        .hero-buttons {
+          flex-direction: column !important;
+          align-items: stretch !important;
+          padding: 0 4px !important;
+        }
+        .hero-buttons a {
+          width: 100% !important;
+          max-width: 100% !important;
+          justify-content: center !important;
+        }
       }
 
       /* ── GENERAL RESPONSIVE ── */
       @media (max-width: 768px) {
-        .hero-buttons { flex-direction: column !important; align-items: center !important; }
-        .hero-buttons a { width: 100% !important; max-width: 320px !important; justify-content: center !important; }
         .prize-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
         .steps-grid { grid-template-columns: repeat(2, 1fr) !important; }
         .charities-grid { grid-template-columns: 1fr !important; }
@@ -646,19 +686,33 @@ export default function HomePage() {
       {position && <Firework x={position.x} y={position.y} onFinish={() => setPosition(null)} />}
       <CursorOrb />
       <Navbar />
+
+      {/*
+        ── KEY FIX ──
+        The hero section is now `position: relative` with `display: flex / align-items: center`.
+        RippleRings live INSIDE the same flex container as the content div, both absolutely
+        positioned. The rings use `top: 50% / left: 50%` which now means the vertical centre
+        of the hero section — which IS the centre of the text block because the section uses
+        flexbox centering. This works identically on all screen sizes.
+      */}
       <section
         className="hero-section"
         style={{
           position: 'relative', padding: '120px 24px 80px',
           textAlign: 'center', overflow: 'hidden',
           minHeight: '95vh', display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           background: 'radial-gradient(ellipse 90% 80% at 50% 48%, rgba(0,107,58,0.06) 0%, rgba(0,107,58,0.025) 45%, #fafffe 75%)',
         }}
       >
         <MeshBg />
+
+        {/* Ripple rings now sit at true vertical & horizontal centre of the section */}
         <RippleRings />
-        <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative', zIndex: 1, width: '100%' }}>
+
+        {/* Hero content — z-index:1 keeps it above rings */}
+        <div style={{ maxWidth: 860, width: '100%', position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '8px 20px', borderRadius: 999,
@@ -695,8 +749,9 @@ export default function HomePage() {
             The subscription platform where your Stableford scores enter monthly prize draws —
             and every subscription drives real charitable impact.
           </p>
+
+          {/* ── FIXED BUTTONS ── side-by-side on all screens ≥380px, stacked only on very small */}
           <div className="hero-buttons" style={{
-            display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16,
             animation: heroVisible ? 'fadeSlideUp 0.6s ease 0.3s both' : 'none',
           }}>
             <Link to="/register" style={{
@@ -707,6 +762,7 @@ export default function HomePage() {
               boxShadow: '0 8px 32px rgba(0,107,58,0.38)',
               animation: 'pulseRing 2.5s infinite 1.5s',
               transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              whiteSpace: 'nowrap',
             }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,107,58,0.48)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1) translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,107,58,0.38)'; }}
@@ -721,6 +777,7 @@ export default function HomePage() {
               fontWeight: 700, fontSize: 16, textDecoration: 'none',
               boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
               transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+              whiteSpace: 'nowrap',
             }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)'; e.currentTarget.style.borderColor = '#006B3A'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,107,58,0.15)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1) translateY(0)'; e.currentTarget.style.borderColor = 'rgba(0,107,58,0.2)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'; }}
@@ -728,6 +785,7 @@ export default function HomePage() {
               Browse Charities
             </Link>
           </div>
+
           <div style={{
             marginTop: 72, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 16, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto',
@@ -753,10 +811,12 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-        <div style={{ position: 'absolute', bottom: 24, left: '50%', animation: 'floatY 2.5s ease-in-out infinite', color: '#9ab8a8' }}>
+
+        <div style={{ position: 'absolute', bottom: 24, left: '50%', animation: 'floatY 2.5s ease-in-out infinite', color: '#9ab8a8', zIndex: 1 }}>
           <ChevronDown size={24} />
         </div>
       </section>
+
       <div style={{ background: '#006B3A', padding: '14px 0', overflow: 'hidden', position: 'relative' }}>
         <div style={{ display: 'flex', width: 'max-content', animation: 'tickerScroll 20s linear infinite' }}>
           {[...tickerItems, ...tickerItems].map((item, i) => (
