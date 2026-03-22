@@ -174,7 +174,7 @@ function RippleRings() {
       {rings.map((ring, i) => (
         <div
           key={i}
-          className={`ripple-ring ripple-ring-${i} absolute left-1/2 top-[30%] md:top-[50%]`}
+          className={`ripple-ring ripple-ring-${i} absolute left-1/2 top-[40%] md:top-[50%]`}
           style={{
             position: 'absolute',
             width: ring.size, height: ring.size,
