@@ -174,11 +174,9 @@ function RippleRings() {
       {rings.map((ring, i) => (
         <div
           key={i}
-          className={`ripple-ring ripple-ring-${i}`}
+          className={`ripple-ring ripple-ring-${i} absolute left-1/2 top-[30%] md:top-[50%]`}
           style={{
             position: 'absolute',
-            // Anchor to the hero text block center, not the section center
-            top: '50%', left: '50%',
             width: ring.size, height: ring.size,
             marginLeft: -ring.size / 2, marginTop: -ring.size / 2,
             borderRadius: '50%',
