@@ -245,7 +245,7 @@ export default function RegisterPage() {
         }}>
           <Heart size={13} fill="rgba(255,255,255,0.7)" color="transparent" />
           <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 11, lineHeight: 1.4, margin: 0 }}>
-            Over <strong style={{ color: '#fff' }}>£200,000</strong> raised for UK charities through GolfGives.
+            Over <strong style={{ color: '#fff' }}>£200,000</strong> raised for UK charities through PlayForGood
           </p>
         </div>
       </div>
@@ -280,7 +280,7 @@ export default function RegisterPage() {
             }}>
               <Trophy size={14} color="#fff" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: 16, color: '#0d1f14' }}>GolfGives</span>
+            <span style={{ fontWeight: 700, fontSize: 16, color: '#0d1f14' }}>PlayForGood</span>
           </Link>
           <div style={{ marginBottom: 18 }}>
             <h1 style={{

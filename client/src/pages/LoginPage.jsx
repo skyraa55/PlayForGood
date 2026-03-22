@@ -227,7 +227,7 @@ export default function LoginPage() {
             }}>
               <Trophy size={16} color="#fff" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: 18, color: '#0d1f14' }}>GolfGives</span>
+            <span style={{ fontWeight: 700, fontSize: 18, color: '#0d1f14' }}>PlayForGood</span>
           </Link>
           <div style={{ marginBottom: 32 }}>
             <h1 style={{
@@ -376,7 +376,7 @@ export default function LoginPage() {
             margin: '24px 0',
           }}>
             <div style={{ flex: 1, height: 1, background: '#e8f0eb' }} />
-            <span style={{ fontSize: 12, color: '#a0b8a9', fontWeight: 500 }}>New to GolfGives?</span>
+            <span style={{ fontSize: 12, color: '#a0b8a9', fontWeight: 500 }}>New to PlayForGood?</span>
             <div style={{ flex: 1, height: 1, background: '#e8f0eb' }} />
           </div>
           <Link to="/register" style={{
